@@ -1,0 +1,14 @@
+{
+  "license": "MIT",
+  "types": "",
+  "devDependencies": {
+  },
+  "name": "@react-native-oh-tpl/react-native-image-resizer",
+  "description": "Rescale local images with React Native.",
+  "main": "index.ets",
+  "type": "module",
+  "version": "3.0.9-0.0.1",
+  "dependencies": {
+    "@rnoh/react-native-openharmony": "file:../react_native_openharmony"
+  }
+}
