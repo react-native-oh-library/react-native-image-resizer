@@ -1,6 +1,6 @@
 {
-  "name": "@bam.tech/react-native-image-resizer",
-  "version": "3.0.9",
+  "name": "@react-native-oh-tpl/react-native-image-resizer",
+  "version": "3.0.9-0.0.1",
   "description": "Rescale local images with React Native",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
@@ -10,17 +10,10 @@
   "files": [
     "src",
     "lib",
-    "android",
-    "ios",
     "cpp",
     "*.podspec",
     "!lib/typescript/example",
-    "!ios/build",
-    "!android/build",
-    "!android/gradle",
-    "!android/gradlew",
-    "!android/gradlew.bat",
-    "!android/local.properties",
+    "harmony",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
@@ -41,6 +34,7 @@
     "react",
     "android",
     "ios",
+    "harmony",
     "images",
     "image",
     "image-resizer",
@@ -61,6 +55,9 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
+  },
+  "dependencies": {
+    "@bam.tech/react-native-image-resizer": "3.0.9"
   },
   "devDependencies": {
     "@evilmartians/lefthook": "^1.2.2",
@@ -168,13 +165,15 @@
       ]
     ]
   },
-  "codegenConfig": {
-    "libraries": [
-      {
-        "name": "RNImageResizerSpec",
-        "type": "modules",
-        "jsSrcsDir": "src"
-      }
-    ]
+  "overrides": {
+    "@react-native/codegen": "0.74.0"
+  },
+  "harmony": {
+    "alias": "@bam.tech/react-native-image-resizer",
+    "codegenConfig": {
+      "specPaths": [
+        "./src"
+      ]
+    }
   }
 }

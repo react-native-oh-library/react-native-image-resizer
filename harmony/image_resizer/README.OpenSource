@@ -1,0 +1,11 @@
+[
+    {
+        "Name": "@bam.tech/react-native-image-resizer",
+        "License": "MIT License",
+        "License File": "https://github.com/bamlab/react-native-image-resizer/blob/master/LICENSE",
+        "Version Number": "3.0.9",
+        "Owner" : "Florian Rival <florianr@bam.tech>"
+        "Upstream URL": "https://github.com/bamlab/react-native-image-resizer",
+        "Description": "Rescale local images with React Native."
+    }
+]
