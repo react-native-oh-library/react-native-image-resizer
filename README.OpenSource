@@ -4,7 +4,7 @@
         "License": "MIT License",
         "License File": "https://github.com/bamlab/react-native-image-resizer/blob/master/LICENSE",
         "Version Number": "3.0.9",
-        "Owner" : "Florian Rival <florianr@bam.tech>"
+        "Owner" : "xiafeng@huawei.com>"
         "Upstream URL": "https://github.com/bamlab/react-native-image-resizer",
         "Description": "Rescale local images with React Native."
     }
