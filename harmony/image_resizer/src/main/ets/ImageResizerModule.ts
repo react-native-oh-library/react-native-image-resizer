@@ -51,14 +51,14 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
     let i = uri.lastIndexOf('/')
     let dir = uri.substring(0, i);
     let file;
-    if (dir == this.ctx.uiAbilityContext.cacheDir || dir == 'file://' + this.ctx.uiAbilityContext.cacheDir) {
+    if (dir == this.ctx.uiAbilityContext.cacheDir + this.getDir(uri) || dir == 'file://' + this.ctx.uiAbilityContext.cacheDir + this.getDir(uri)) {
       file = fs.openSync(uri, fs.OpenMode.CREATE);
     } else {
-      await fs.copy(uri, this.getCacheFilePath(format));
-      file = fs.openSync(this.getCacheFilePath(format), fs.OpenMode.CREATE);
+      await fs.copy(uri, this.getCacheFilePath(format, uri));
+      file = fs.openSync(this.getCacheFilePath(format, uri), fs.OpenMode.CREATE);
     }
 
-    await this.getImageSize(file.fd, rotation, mode, width, height, onlyScaleDown, format, quality, keepMeta);
+    await this.getImageSize(uri, file.fd, rotation, mode, width, height, onlyScaleDown, format, quality, keepMeta);
     this.fileUri = 'file://' + this.filePath;
     let newFile = fs.openSync(this.fileUri, fs.OpenMode.CREATE);
     this.size = this.getFileSize(newFile.fd);
@@ -100,7 +100,7 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
     });
   }
 
-  private async getImageSize(fd: number, rotation: number, mode: string, width: number, height: number,
+  private async getImageSize(uri: string, fd: number, rotation: number, mode: string, width: number, height: number,
     onlyScaleDown: boolean, format: string, quality: number, keepMeta: boolean) {
     let imageIS = image.createImageSource(fd)
     let imagePM = await imageIS.createPixelMap({ editable: true });
@@ -140,14 +140,14 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
     let xScale = Math.round(this.finalWidth / oldWidth);
     let yScale = Math.round(this.finalHeight / oldHeight);
 
-    this.filePath = this.getCacheFilePath(format);
+    this.filePath = this.getCacheFilePath(format, uri);
     try {
       await imagePM.rotate(rotation);
       await imagePM.scale(xScale, yScale);
       const imagePackerApi: image.ImagePacker = image.createImagePacker();
       const file = fs.openSync(this.filePath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE);
       let newFormat = "image/" + format;
-      const buf = await imagePackerApi.packing(imagePM, { format: newFormat, quality: quality });
+      let buf = await imagePackerApi.packing(imagePM, { format: newFormat, quality: quality });
       this.base64 = buffer.from(buf).toString('base64');
       await fs.write(file.fd, buf);
       fs.closeSync(file.fd);
@@ -182,8 +182,22 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
 
   }
 
-  private getCacheFilePath(format: string) {
-    return this.ctx.uiAbilityContext.cacheDir + '/rn_image_resizer_lib_temp_' + util.generateRandomUUID(true) + '.' +
+  private getDir(uri: string) {
+    let i = uri.lastIndexOf('/');
+    let cacheDirLength = this.ctx.uiAbilityContext.cacheDir.length;
+    let fileDir = uri.substring(0, i);
+    let mimeUri = uri.substring(0, 4)
+    let dir;
+    if (mimeUri === 'file') {
+      dir = fileDir.substring('file://'.length + cacheDirLength);
+    } else {
+      dir = fileDir.substring(cacheDirLength);
+    }
+    return dir;
+  }
+
+  private getCacheFilePath(format: string, uri: string) {
+    return this.ctx.uiAbilityContext.cacheDir + this.getDir(uri) +'/rn_image_resizer_lib_temp_' + util.generateRandomUUID(true) + '.' +
       format;
   }
 
