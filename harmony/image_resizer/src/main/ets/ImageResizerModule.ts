@@ -120,7 +120,7 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
         }
       } else {
         // "contain" (default) or "cover": keep its aspect ratio
-        let widthRatio = width / oldHeight;
+        let widthRatio = width / oldWidth;
         let heightRatio = height / oldHeight;
         let ratio;
         if (mode == "cover") {
