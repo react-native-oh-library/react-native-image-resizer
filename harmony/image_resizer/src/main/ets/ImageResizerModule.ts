@@ -105,8 +105,8 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
     let imageIS = image.createImageSource(fd)
     let imagePM = await imageIS.createPixelMap({ editable: true });
     let imgInfo = await imagePM.getImageInfo();
-    let oldWidth = Math.round(px2vp(imgInfo.size.width));
-    let oldHeight = Math.round(px2vp(imgInfo.size.height));
+    let oldWidth = imgInfo.size.width;
+    let oldHeight = imgInfo.size.height;
 
     if (height > 0 && width > 0) {
       if (mode == "stretch") {
