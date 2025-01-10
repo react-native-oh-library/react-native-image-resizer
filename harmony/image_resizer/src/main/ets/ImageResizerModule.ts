@@ -137,8 +137,8 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
       }
     }
 
-    let xScale = Math.round(this.finalWidth / oldWidth);
-    let yScale = Math.round(this.finalHeight / oldHeight);
+    let xScale = Number((this.finalWidth / oldWidth).toFixed(5));
+    let yScale = Number((this.finalHeight / oldHeight).toFixed(5));
 
     this.filePath = this.getCacheFilePath(format, uri);
     try {
