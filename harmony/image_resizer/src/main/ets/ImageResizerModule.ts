@@ -54,8 +54,9 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
     if (dir == this.ctx.uiAbilityContext.cacheDir + this.getDir(uri) || dir == 'file://' + this.ctx.uiAbilityContext.cacheDir + this.getDir(uri)) {
       file = fs.openSync(uri, fs.OpenMode.CREATE);
     } else {
-      await fs.copy(uri, this.getCacheFilePath(format, uri));
-      file = fs.openSync(this.getCacheFilePath(format, uri), fs.OpenMode.CREATE);
+      let copyFilePath = this.getCacheFilePath(format, uri)
+      fs.copyFileSync(uri, copyFilePath, 0);
+      file = fs.openSync(copyFilePath, fs.OpenMode.CREATE);
     }
 
     await this.getImageSize(uri, file.fd, rotation, mode, width, height, onlyScaleDown, format, quality, keepMeta);
@@ -197,7 +198,7 @@ export class ImageResizerModule extends TurboModule implements TM.ImageResizer.S
   }
 
   private getCacheFilePath(format: string, uri: string) {
-    return this.ctx.uiAbilityContext.cacheDir + this.getDir(uri) +'/rn_image_resizer_lib_temp_' + util.generateRandomUUID(true) + '.' +
+    return this.ctx.uiAbilityContext.cacheDir +'/rn_image_resizer_lib_temp_' + util.generateRandomUUID(true) + '.' +
       format;
   }
 
